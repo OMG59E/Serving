@@ -26,7 +26,7 @@ First let's take a look at the raw data:
 saw a trailer for this on another video, and decided to rent when it came out. boy, was i disappointed! the story is extremely boring, the acting (aside from christopher walken) is bad, and i couldn't care less about the characters, aside from really wanting to see nora's husband get thrashed. christopher walken's role is such a throw-away, what a tease! | 0
 ```
 
-This is a sample of English comments. The sample uses | as the separator. The content of the comment is before the separator. The label is the sample after the separator. 0 is the negative while 1 is the positive.
+This is a sample of English comments. The sample uses `|` as the separator. The content of the comment is before the separator. The label is the sample after the separator. 0 is the negative while 1 is the positive.
 
 ## Step3：Define Reader, divide training set and test set
 
@@ -228,7 +228,7 @@ if __name__ == "__main__":
 
 </details>
 
-! [Training process](./ imdb_loss.png) As can be seen from the above figure, the loss of the model starts to converge after the 65th round. We save the model and configuration file after the 65th round of training is completed. The saved files are divided into imdb_cnn_client_conf and imdb_cnn_model folders. The former contains client-side configuration files, and the latter contains server-side configuration files and saved model files.
+![Training process](./imdb_loss.png) As can be seen from the above figure, the loss of the model starts to converge after the 65th round. We save the model and configuration file after the 65th round of training is completed. The saved files are divided into imdb_cnn_client_conf and imdb_cnn_model folders. The former contains client-side configuration files, and the latter contains server-side configuration files and saved model files.
 The parameter list of the save_model function is as follows:
 
 | Parameter            | Meaning                                                        |
@@ -243,10 +243,10 @@ The parameter list of the save_model function is as follows:
 
 The Paddle Serving framework supports two types of prediction service methods. One is to communicate through RPC and the other is to communicate through HTTP. The deployment and use of RPC prediction service will be introduced first. The deployment and use of HTTP prediction service will be introduced at Step 8. .
 
-`` `shell
+```shell
 python -m paddle_serving_server.serve --model imdb_cnn_model / --port 9292 #cpu prediction service
 python -m paddle_serving_server_gpu.serve --model imdb_cnn_model / --port 9292 --gpu_ids 0 #gpu prediction service
-`` `
+```
 
 The parameter --model in the command specifies the server-side model and configuration file directory previously saved, --port specifies the port of the prediction service. When deploying the gpu prediction service using the gpu version, you can use --gpu_ids to specify the gpu used.
 
@@ -287,9 +287,9 @@ The script receives data from standard input and prints out the probability that
 
 The client implemented in the previous step runs the prediction service as an example. The usage method is as follows:
 
-`` `shell
+```shell
 cat test_data/part-0 | python test_client.py imdb_lstm_client_conf / serving_client_conf.prototxt imdb.vocab
-`` `
+```
 
 Using 2084 samples in the test_data/part-0 file for test testing, the model prediction accuracy is 88.19%.
 
@@ -349,13 +349,13 @@ In the above command, the first parameter is the saved server-side model and con
 ## Step9: Call the prediction service with plaintext data
 After starting the HTTP prediction service, you can make prediction with a single command:
 
-`` `
+```
 curl -H "Content-Type: application / json" -X POST -d '{"words": "i am very sad | 0", "fetch": ["prediction"]}' http://127.0.0.1:9292/imdb/prediction
-`` `
+```
 When the inference process is normal, the prediction probability is returned, as shown below.
 
-`` `
+```
 {"prediction": [0.5592559576034546,0.44074398279190063]}
-`` `
+```
 
 ** Note **: The effect of each model training may be slightly different, and the inferred probability value using the trained model may not be consistent with the example.
